@@ -1,0 +1,1510 @@
+# Simple workflow for deploying static content to GitHub Pages
+name: Deploy static content to Pages
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Single deploy job since we're just deploying
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with: <!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>Catálogo de Perfumes — Admin + Estoque</title>
+
+  <!-- Fonts (Google) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400,600,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg0: #0b0a09;
+      --bg1: #11100f;
+      --bg2: #171513;
+      --card: #141211cc;
+      --stroke: #d6b36a55;
+      --stroke2: #d6b36a99;
+      --gold: #d6b36a;
+      --gold2: #b59e43;
+      --text: #f2efe6;
+      --muted: #cfc7b2;
+      --muted2: #a89f8a;
+      --danger: #ff5a6b;
+      --ok: #65ffb8;
+      --shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+      --glow: 0 0 0 1px var(--stroke2), 0 0 26px rgba(214, 179, 106, 0.22);
+      --radius: 18px;
+      --radius2: 26px;
+      --maxw: 1240px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+    html,
+    body {
+      height: 100%;
+    }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: radial-gradient(1200px 800px at 12% 10%, rgba(214, 179, 106, 0.1), transparent 55%),
+        radial-gradient(900px 600px at 86% 20%, rgba(255, 90, 107, 0.06), transparent 60%),
+        radial-gradient(900px 700px at 60% 92%, rgba(101, 255, 184, 0.05), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 45%, var(--bg0));
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* subtle grain */
+    body:before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+      opacity: 0.15;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+    :focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 2px;
+      border-radius: 10px;
+    }
+
+    .wrap {
+      width: min(var(--maxw), calc(100% - 40px));
+      margin: 0 auto;
+      padding: 20px 0 70px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(11, 10, 9, 0.82), rgba(11, 10, 9, 0.58));
+      border-bottom: 1px solid rgba(214, 179, 106, 0.12);
+    }
+
+    .topbar {
+      width: min(var(--maxw), calc(100% - 40px));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+    .brand h1 {
+      margin: 0;
+      font-family: Fraunces, serif;
+      letter-spacing: -0.02em;
+      font-size: clamp(18px, 2.3vw, 28px);
+      line-height: 1.1;
+      color: var(--text);
+    }
+    .brand .pill {
+      font-size: 12px;
+      color: #0e0d0b;
+      background: linear-gradient(135deg, var(--gold), #f1d59a);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      padding: 6px 10px;
+      border-radius: 999px;
+      box-shadow: 0 10px 30px rgba(214, 179, 106, 0.18);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      position: relative;
+      border: 1px solid rgba(214, 179, 106, 0.22);
+      background: linear-gradient(180deg, rgba(20, 18, 17, 0.75), rgba(20, 18, 17, 0.35));
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+    }
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(214, 179, 106, 0.45);
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+    }
+    .btn:active {
+      transform: translateY(0px) scale(0.99);
+    }
+
+    .btn.primary {
+      color: #0f0d09;
+      background: linear-gradient(135deg, var(--gold), #f2d79f);
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+    .btn.danger {
+      border-color: rgba(255, 90, 107, 0.35);
+      background: linear-gradient(180deg, rgba(255, 90, 107, 0.18), rgba(20, 18, 17, 0.35));
+    }
+
+    .btn .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 99px;
+      background: var(--gold);
+      box-shadow: 0 0 0 4px rgba(214, 179, 106, 0.12);
+    }
+
+    .hero {
+      padding: 22px 0 12px;
+    }
+    .heroGrid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    @media (max-width: 900px) {
+      .heroGrid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      border-radius: var(--radius2);
+      background: radial-gradient(900px 360px at 30% 0%, rgba(214, 179, 106, 0.12), transparent 60%),
+        linear-gradient(180deg, rgba(20, 18, 17, 0.78), rgba(13, 12, 11, 0.65));
+      border: 1px solid rgba(214, 179, 106, 0.18);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+    .panel:before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(
+        120deg,
+        rgba(214, 179, 106, 0.22),
+        transparent 35%,
+        rgba(101, 255, 184, 0.08) 72%,
+        transparent
+      );
+      opacity: 0.35;
+      pointer-events: none;
+    }
+    .panelInner {
+      position: relative;
+      padding: 18px;
+    }
+
+    .title {
+      margin: 0 0 8px;
+      font-family: Fraunces, serif;
+      font-size: clamp(22px, 2.8vw, 34px);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .metaRow {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .chip {
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(214, 179, 106, 0.2);
+      background: rgba(10, 9, 8, 0.35);
+      color: var(--muted);
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .chip strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+    .chip .k {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .syncCard {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .syncRow {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .input {
+      flex: 1 1 240px;
+      padding: 11px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(214, 179, 106, 0.22);
+      background: rgba(9, 8, 7, 0.5);
+      color: var(--text);
+    }
+    .hint {
+      color: var(--muted2);
+      font-size: 12px;
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    main {
+      margin-top: 16px;
+    }
+
+    /* 5 por linha no desktop */
+    .catalog {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+    @media (max-width: 1200px) {
+      .catalog {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 980px) {
+      .catalog {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 700px) {
+      .catalog {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 420px) {
+      .catalog {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      border-radius: var(--radius);
+      background: radial-gradient(240px 240px at 30% 20%, rgba(214, 179, 106, 0.16), transparent 65%),
+        linear-gradient(180deg, rgba(20, 18, 17, 0.78), rgba(10, 9, 8, 0.55));
+      border: 1px solid rgba(214, 179, 106, 0.16);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+      position: relative;
+      min-height: 260px;
+      transform: translateY(10px);
+      opacity: 0;
+      animation: rise 0.7s ease forwards;
+    }
+    .card:nth-child(1) {
+      animation-delay: 0.02s;
+    }
+    .card:nth-child(2) {
+      animation-delay: 0.05s;
+    }
+    .card:nth-child(3) {
+      animation-delay: 0.08s;
+    }
+    .card:nth-child(4) {
+      animation-delay: 0.11s;
+    }
+    .card:nth-child(5) {
+      animation-delay: 0.14s;
+    }
+
+    @keyframes rise {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .cardTop {
+      padding: 12px 12px 10px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .badge {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(242, 239, 230, 0.86);
+      border: 1px solid rgba(214, 179, 106, 0.2);
+      background: rgba(10, 9, 8, 0.35);
+      padding: 7px 9px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .badge.low {
+      border-color: rgba(255, 90, 107, 0.35);
+      color: rgba(255, 190, 198, 0.95);
+    }
+    .badge.out {
+      border-color: rgba(255, 90, 107, 0.55);
+      color: rgba(255, 190, 198, 0.98);
+      background: rgba(255, 90, 107, 0.1);
+    }
+
+    .art {
+      height: 140px;
+      margin: 0 12px 10px;
+      border-radius: 16px;
+      border: 1px solid rgba(214, 179, 106, 0.18);
+      background: radial-gradient(120px 120px at 35% 30%, rgba(214, 179, 106, 0.35), transparent 70%),
+        radial-gradient(120px 120px at 70% 60%, rgba(101, 255, 184, 0.12), transparent 70%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+      position: relative;
+      overflow: hidden;
+    }
+    .art svg {
+      position: absolute;
+      inset: -12px;
+      width: calc(100% + 24px);
+      height: calc(100% + 24px);
+      opacity: 0.95;
+    }
+    .art .imgLabel {
+      position: absolute;
+      left: 10px;
+      bottom: 8px;
+      font-size: 11px;
+      color: rgba(242, 239, 230, 0.8);
+      background: rgba(0, 0, 0, 0.22);
+      border: 1px solid rgba(214, 179, 106, 0.16);
+      padding: 6px 8px;
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+    }
+
+    .cardBody {
+      padding: 0 12px 12px;
+    }
+    .name {
+      margin: 0 0 4px;
+      font-family: Fraunces, serif;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      font-size: 18px;
+      color: var(--gold);
+      text-shadow: 0 0 16px rgba(214, 179, 106, 0.14);
+    }
+    .brandLine {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .facts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .fact {
+      border: 1px solid rgba(214, 179, 106, 0.12);
+      background: rgba(0, 0, 0, 0.18);
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-size: 12px;
+      color: rgba(242, 239, 230, 0.86);
+    }
+    .fact span {
+      color: var(--muted2);
+      display: block;
+      font-size: 11px;
+      margin-bottom: 4px;
+    }
+    .price {
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      color: var(--text);
+    }
+
+    .cardActions {
+      padding: 0 12px 12px;
+      display: flex;
+      gap: 10px;
+    }
+    .cardActions .btn {
+      width: 100%;
+      justify-content: center;
+      padding: 10px 12px;
+      border-radius: 14px;
+      box-shadow: none;
+    }
+
+    .small {
+      font-size: 12px;
+      color: var(--muted2);
+    }
+
+    /* Modal */
+    .modalOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.62);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 18px;
+      z-index: 50;
+    }
+    .modalOverlay.show {
+      display: flex;
+    }
+    .modal {
+      width: min(860px, 100%);
+      border-radius: 26px;
+      background: radial-gradient(900px 400px at 20% 0%, rgba(214, 179, 106, 0.16), transparent 60%),
+        linear-gradient(180deg, rgba(20, 18, 17, 0.92), rgba(10, 9, 8, 0.82));
+      border: 1px solid rgba(214, 179, 106, 0.22);
+      box-shadow: 0 40px 120px rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+      transform: translateY(10px);
+      animation: modalIn 0.18s ease forwards;
+    }
+    @keyframes modalIn {
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    .modalHead {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 16px 10px;
+      border-bottom: 1px solid rgba(214, 179, 106, 0.12);
+    }
+    .modalHead h2 {
+      margin: 0;
+      font-family: Fraunces, serif;
+      letter-spacing: -0.03em;
+      font-size: 22px;
+      color: var(--gold);
+    }
+    .iconBtn {
+      border: 1px solid rgba(214, 179, 106, 0.22);
+      background: rgba(0, 0, 0, 0.22);
+      color: var(--text);
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      cursor: pointer;
+    }
+    .iconBtn:hover {
+      border-color: rgba(214, 179, 106, 0.45);
+    }
+
+    .modalBody {
+      padding: 14px 16px 16px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 14px;
+    }
+    @media (max-width: 860px) {
+      .modalBody {
+        grid-template-columns: 1fr;
+      }
+      .modalOverlay {
+        align-items: stretch;
+      }
+      .modal {
+        border-radius: 22px;
+      }
+    }
+
+    .formGrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 560px) {
+      .formGrid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      color: var(--muted2);
+      margin: 10px 0 6px;
+    }
+    .field {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(214, 179, 106, 0.22);
+      background: rgba(9, 8, 7, 0.55);
+      color: var(--text);
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .row .btn {
+      flex: 1 1 190px;
+    }
+
+    .stockBox {
+      border-radius: 18px;
+      border: 1px solid rgba(214, 179, 106, 0.16);
+      background: rgba(0, 0, 0, 0.18);
+      padding: 12px;
+    }
+    .stockLine {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(214, 179, 106, 0.14);
+    }
+    .stockLine:last-child {
+      border-bottom: none;
+    }
+    .stockLine strong {
+      color: var(--text);
+    }
+    .stockLine .n {
+      color: var(--gold);
+      font-weight: 800;
+    }
+    .stockControls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .step {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      border: 1px solid rgba(214, 179, 106, 0.2);
+      background: rgba(0, 0, 0, 0.18);
+      color: var(--text);
+      cursor: pointer;
+    }
+    .step:hover {
+      border-color: rgba(214, 179, 106, 0.45);
+    }
+    .step:active {
+      transform: scale(0.98);
+    }
+
+    footer {
+      margin-top: 28px;
+      color: rgba(242, 239, 230, 0.6);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 18px;
+      z-index: 60;
+      background: rgba(10, 9, 8, 0.82);
+      border: 1px solid rgba(214, 179, 106, 0.22);
+      border-radius: 999px;
+      padding: 10px 14px;
+      color: var(--text);
+      box-shadow: 0 18px 70px rgba(0, 0, 0, 0.55);
+      display: none;
+      backdrop-filter: blur(10px);
+      max-width: calc(100% - 26px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .toast.show {
+      display: block;
+    }
+    .toast .k {
+      color: var(--gold);
+      font-weight: 800;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="topbar">
+      <div class="brand" aria-label="Cabeçalho do catálogo">
+        <h1>Catálogo de Perfumes</h1>
+        <span class="pill" id="modePill">ADMIN</span>
+      </div>
+
+      <div class="actions" role="group" aria-label="Ações do cabeçalho">
+        <button class="btn" id="toggleModeBtn" type="button" aria-pressed="true">
+          <span class="dot" aria-hidden="true"></span>
+          Alternar modo (Admin/Cliente)
+        </button>
+        <button class="btn primary" id="newPerfumeBtn" type="button">Adicionar perfume</button>
+        <button class="btn" id="exportBtn" type="button">Exportar JSON</button>
+        <label class="btn" for="importInput" style="cursor:pointer;">Importar JSON</label>
+        <input id="importInput" type="file" accept="application/json" hidden />
+        <button class="btn danger" id="resetBtn" type="button" title="Apaga dados locais e volta ao padrão">Reset local</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <section class="hero">
+      <div class="heroGrid">
+        <article class="panel">
+          <div class="panelInner">
+            <h2 class="title">Estoque + Preço + Catálogo em um só lugar</h2>
+            <p class="subtitle">
+              Modo <strong>Admin</strong> permite editar perfumes, criar novos e controlar <strong>estoque</strong>.
+              Modo <strong>Cliente</strong> mostra apenas o catálogo (e pode ocultar itens sem estoque).
+            </p>
+            <div class="metaRow">
+              <div class="chip"><span class="k">Grid</span> <strong>5 perfumes por linha</strong> (desktop)</div>
+              <div class="chip"><span class="k">Sync</span> <strong>1 arquivo JSON</strong> para Admin/Cliente</div>
+              <div class="chip"><span class="k">Local</span> <strong>autosave</strong> no navegador</div>
+            </div>
+          </div>
+        </article>
+
+        <aside class="panel">
+          <div class="panelInner syncCard">
+            <div>
+              <h3 class="title" style="font-size:22px;margin-bottom:6px;">Sincronização com o site do cliente</h3>
+              <p class="hint">
+                Para ficar “completamente sincronizado”, os dois sites precisam ler o <strong>mesmo JSON</strong> (hospedado no mesmo lugar).
+                Como HTML puro não grava em servidor, aqui a sincronização é feita por <strong>export/import</strong> do mesmo arquivo.
+              </p>
+            </div>
+
+            <div class="syncRow">
+              <input class="input" id="syncUrl" type="url" placeholder="(Opcional) URL do JSON do cliente: https://.../perfumes.json" />
+              <button class="btn" id="loadFromUrlBtn" type="button">Carregar</button>
+            </div>
+            <p class="hint">
+              Se você colocar um JSON em uma URL pública com CORS liberado, este Admin consegue <strong>carregar</strong> de lá.
+              Para sincronização real (editar e refletir automaticamente no site do cliente), você vai precisar de um backend (Firebase/Supabase/API).
+            </p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <main>
+      <section class="catalog" id="catalog" aria-label="Lista de perfumes"></section>
+    </main>
+
+    <footer>
+      Dica: use <strong>Exportar JSON</strong> e substitua o arquivo JSON no site do cliente. Assim os dois ficam iguais.
+    </footer>
+  </div>
+
+  <!-- Modal: editar/criar -->
+  <div class="modalOverlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modalHead">
+        <div>
+          <h2 id="modalTitle">Editar perfume</h2>
+          <div class="small" id="modalSub">Ajuste informações e estoque.</div>
+        </div>
+        <button class="iconBtn" id="closeModalBtn" type="button" aria-label="Fechar">✕</button>
+      </div>
+
+      <div class="modalBody">
+        <section aria-label="Formulário do perfume">
+          <form id="perfumeForm">
+            <div class="formGrid">
+              <div>
+                <label for="fName">Nome</label>
+                <input class="field" id="fName" name="name" type="text" required />
+              </div>
+              <div>
+                <label for="fBrand">Marca</label>
+                <input class="field" id="fBrand" name="brand" type="text" required />
+              </div>
+              <div>
+                <label for="fSize">Tamanho</label>
+                <input class="field" id="fSize" name="size" type="text" required />
+              </div>
+              <div>
+                <label for="fPrice">Preço (texto)</label>
+                <input class="field" id="fPrice" name="price" type="text" required placeholder="R$ 150,00" />
+              </div>
+              <div>
+                <label for="fStock">Estoque (unidades)</label>
+                <input class="field" id="fStock" name="stock" type="number" min="0" step="1" required />
+              </div>
+              <div>
+                <label for="fSku">SKU (opcional)</label>
+                <input class="field" id="fSku" name="sku" type="text" placeholder="Ex: LAT-KHAMRAH-100" />
+              </div>
+            </div>
+
+            <label for="fImage">Imagem (URL) — opcional</label>
+            <input class="field" id="fImage" name="image" type="url" placeholder="Se não usar, fica o desenho (SVG) padrão" />
+
+            <label class="row" style="margin-top:12px;">
+              <button class="btn primary" id="saveBtn" type="submit">Salvar</button>
+              <button class="btn danger" id="deleteBtn" type="button">Excluir</button>
+            </label>
+
+            <p class="hint" style="margin:10px 0 0;">
+              Observação: no modo Cliente, itens com estoque 0 podem ser ocultados (configurável no JS).
+            </p>
+          </form>
+        </section>
+
+        <aside class="stockBox" aria-label="Gestão rápida de estoque">
+          <div class="stockLine">
+            <div>
+              <div class="small">Produto selecionado</div>
+              <strong id="stockName">—</strong>
+            </div>
+          </div>
+          <div class="stockLine">
+            <div>
+              <div class="small">Estoque atual</div>
+              <div class="n" id="stockNow">—</div>
+            </div>
+            <div class="stockControls">
+              <button class="step" id="dec1Btn" type="button" title="-1">−</button>
+              <button class="step" id="inc1Btn" type="button" title="+1">+</button>
+            </div>
+          </div>
+          <div class="stockLine">
+            <div>
+              <div class="small">Ajuste rápido</div>
+              <div class="hint" style="margin:0;">Clique para somar/subtrair sem abrir outro painel.</div>
+            </div>
+            <div class="stockControls">
+              <button class="step" id="dec5Btn" type="button" title="-5">−5</button>
+              <button class="step" id="inc5Btn" type="button" title="+5">+5</button>
+            </div>
+          </div>
+          <div class="stockLine">
+            <div>
+              <div class="small">Status</div>
+              <div class="hint" id="stockStatus" style="margin:0;">—</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const STORAGE_KEY = "perfume_catalog_v2";
+    const SETTINGS_KEY = "perfume_settings_v2";
+
+    const defaultSettings = {
+      hideOutOfStockOnClient: true,
+    };
+
+    const defaultPerfumes = [
+      { id: 1, name: "VENENO BIANCO", brand: "FRENCH AVENUE", size: "100ML", price: "R$ 330,00", image: "", stock: 5, sku: "" },
+      { id: 2, name: "VULCAN FEU", brand: "FRENCH AVENUE", size: "100ML", price: "R$ 280,00", image: "", stock: 5, sku: "" },
+      { id: 3, name: "VULCAN BAIE", brand: "FRENCH AVENUE", size: "100ML", price: "R$ 280,00", image: "", stock: 5, sku: "" },
+      { id: 4, name: "VENENO SCARLET", brand: "FRENCH AVENUE", size: "100ML", price: "R$ 300,00", image: "", stock: 5, sku: "" },
+      { id: 5, name: "LIQUID BRUN", brand: "FRENCH AVENUE", size: "100ML", price: "R$ 230,00", image: "", stock: 5, sku: "" },
+      { id: 6, name: "COCOA MORADO", brand: "FRENCH AVENUE", size: "100ML", price: "R$ 250,00", image: "", stock: 5, sku: "" },
+
+      { id: 7, name: "SABAH AL WARD SUGAR", brand: "AL WATANIAH", size: "100ML", price: "R$ 220,00", image: "", stock: 5, sku: "" },
+      { id: 8, name: "SABAH AL WARD VALENTINE", brand: "AL WATANIAH", size: "100ML", price: "R$ 220,00", image: "", stock: 5, sku: "" },
+      { id: 9, name: "SABAH AL WARD", brand: "AL WATANIAH", size: "100ML", price: "R$ 135,00", image: "", stock: 5, sku: "" },
+      { id: 10, name: "THAHAANI", brand: "AL WATANIAH", size: "100ML", price: "R$ 100,00", image: "", stock: 5, sku: "" },
+      { id: 11, name: "KENZ AL MALIK", brand: "AL WATANIAH", size: "100ML", price: "R$ 100,00", image: "", stock: 5, sku: "" },
+      { id: 12, name: "SPECIAL OUD", brand: "AL WATANIAH", size: "100ML", price: "R$ 95,00", image: "", stock: 5, sku: "" },
+      { id: 13, name: "DUHA", brand: "AL WATANIAH", size: "100ML", price: "R$ 110,00", image: "", stock: 5, sku: "" },
+      { id: 14, name: "SHAGAF AL WARD", brand: "AL WATANIAH", size: "100ML", price: "R$ 105,00", image: "", stock: 5, sku: "" },
+      { id: 15, name: "ATTAR AL WESAL", brand: "AL WATANIAH", size: "100ML", price: "R$ 135,00", image: "", stock: 5, sku: "" },
+      { id: 16, name: "DURRAT", brand: "AL WATANIAH", size: "85ML", price: "R$ 105,00", image: "", stock: 5, sku: "" },
+      { id: 17, name: "OUD MYSTERY INTENSE", brand: "AL WATANIAH", size: "100ML", price: "R$ 115,00", image: "", stock: 5, sku: "" },
+      { id: 18, name: "AMEERI", brand: "AL WATANIAH", size: "100ML", price: "R$ 90,00", image: "", stock: 5, sku: "" },
+      { id: 19, name: "ABYAT", brand: "AL WATANIAH", size: "100ML", price: "R$ 90,00", image: "", stock: 5, sku: "" },
+      { id: 20, name: "AMEERATI", brand: "AL WATANIAH", size: "100ML", price: "R$ 99,00", image: "", stock: 5, sku: "" },
+      { id: 21, name: "WATANI", brand: "AL WATANIAH", size: "100ML", price: "R$ 100,00", image: "", stock: 5, sku: "" },
+      { id: 22, name: "AMNIA", brand: "AL WATANIAH", size: "100ML", price: "R$ 160,00", image: "", stock: 5, sku: "" },
+      { id: 23, name: "GHALA", brand: "AL WATANIAH", size: "100ML", price: "R$ 90,00", image: "", stock: 5, sku: "" },
+      { id: 24, name: "SULTAN AL LAIL", brand: "AL WATANIAH", size: "100ML", price: "R$ 99,00", image: "", stock: 5, sku: "" },
+      { id: 25, name: "BAREEQ AL DHAHAB", brand: "AL WATANIAH", size: "100ML", price: "R$ 95,00", image: "", stock: 5, sku: "" },
+      { id: 26, name: "DURRAT AL AROOS LOVE", brand: "AL WATANIAH", size: "85ML", price: "R$ 210,00", image: "", stock: 5, sku: "" },
+
+      { id: 27, name: "THE KINGDOM WOMEN", brand: "LATTAFA", size: "100ML", price: "R$ 150,00", image: "", stock: 5, sku: "" },
+      { id: 28, name: "THE KINGDOM", brand: "LATTAFA", size: "100ML", price: "R$ 195,00", image: "", stock: 5, sku: "" },
+      { id: 29, name: "THARWAH GOLD", brand: "LATTAFA", size: "100ML", price: "R$ 210,00", image: "", stock: 5, sku: "" },
+      { id: 30, name: "KHAMRAH", brand: "LATTAFA", size: "100ML", price: "R$ 150,00", image: "", stock: 5, sku: "" },
+      { id: 31, name: "KHAMRAH QAHWA", brand: "LATTAFA", size: "100ML", price: "R$ 145,00", image: "", stock: 5, sku: "" },
+      { id: 32, name: "AFEEF", brand: "LATTAFA", size: "100ML", price: "R$ 240,00", image: "", stock: 5, sku: "" },
+      { id: 33, name: "SHAHEEN GOLD", brand: "LATTAFA", size: "100ML", price: "R$ 160,00", image: "", stock: 5, sku: "" },
+      { id: 34, name: "KIT LATTAFA ASAD & ASAD ZANZIBAR", brand: "LATTAFA", size: "KIT", price: "R$ 220,00", image: "", stock: 5, sku: "" },
+      { id: 35, name: "ASAD ZANZIBAR LIMITED", brand: "LATTAFA", size: "100ML", price: "R$ 135,00", image: "", stock: 5, sku: "" },
+      { id: 36, name: "ASAD ELIXIR", brand: "LATTAFA", size: "100ML", price: "R$ 200,00", image: "", stock: 5, sku: "" },
+      { id: 37, name: "ASAD BURBON", brand: "LATTAFA", size: "100ML", price: "R$ 180,00", image: "", stock: 5, sku: "" },
+      { id: 38, name: "ASAD", brand: "LATTAFA", size: "100ML", price: "R$ 145,00", image: "", stock: 5, sku: "" },
+      { id: 39, name: "KIT YARA 2*100M", brand: "LATTAFA", size: "KIT", price: "R$ 250,00", image: "", stock: 5, sku: "" },
+      { id: 40, name: "KIT YARA 4*25ML", brand: "LATTAFA", size: "KIT", price: "R$ 230,00", image: "", stock: 5, sku: "" },
+      { id: 41, name: "YARA CANDY", brand: "LATTAFA", size: "100ML", price: "R$ 140,00", image: "", stock: 5, sku: "" },
+      { id: 42, name: "YARA", brand: "LATTAFA", size: "100ML", price: "R$ 145,00", image: "", stock: 5, sku: "" },
+      { id: 43, name: "YARA MOI", brand: "LATTAFA", size: "100ML", price: "R$ 140,00", image: "", stock: 5, sku: "" },
+      { id: 44, name: "YARA TOUS", brand: "LATTAFA", size: "100ML", price: "R$ 140,00", image: "", stock: 5, sku: "" },
+      { id: 45, name: "YARA ELIXIR", brand: "LATTAFA", size: "100ML", price: "R$ 200,00", image: "", stock: 5, sku: "" },
+      { id: 46, name: "EMAAN", brand: "LATTAFA", size: "100ML", price: "R$ 150,00", image: "", stock: 5, sku: "" },
+      { id: 47, name: "SAKEENA", brand: "LATTAFA", size: "100ML", price: "R$ 150,00", image: "", stock: 5, sku: "" },
+      { id: 48, name: "FAKHAR BLACK", brand: "LATTAFA", size: "100ML", price: "R$ 145,00", image: "", stock: 5, sku: "" },
+      { id: 49, name: "FAKHAR PLATIN", brand: "LATTAFA", size: "100ML", price: "R$ 135,00", image: "", stock: 5, sku: "" },
+      { id: 50, name: "FAKAR ROSE", brand: "LATTAFA", size: "100ML", price: "R$ 150,00", image: "", stock: 5, sku: "" },
+      { id: 51, name: "FAKHAR GOLD", brand: "LATTAFA", size: "100ML", price: "R$ 145,00", image: "", stock: 5, sku: "" },
+      { id: 52, name: "ECLAIRE", brand: "LATTAFA", size: "100ML", price: "R$ 170,00", image: "", stock: 5, sku: "" },
+      { id: 53, name: "MUSAMAM WHITE INTENSE", brand: "LATTAFA", size: "100ML", price: "R$ 235,00", image: "", stock: 5, sku: "" },
+      { id: 54, name: "MUSAMAM", brand: "LATTAFA", size: "100ML", price: "R$ 190,00", image: "", stock: 5, sku: "" },
+      { id: 55, name: "AL BADE E AL OUD FOR GLORY", brand: "LATTAFA", size: "100ML", price: "R$ 135,00", image: "", stock: 5, sku: "" },
+      { id: 56, name: "BADE E AL OUD SUBLIME", brand: "LATTAFA", size: "100ML", price: "R$ 135,00", image: "", stock: 5, sku: "" },
+      { id: 57, name: "OUD ONOR AND GLORY", brand: "LATTAFA", size: "100ML", price: "R$ 135,00", image: "", stock: 5, sku: "" },
+      { id: 58, name: "KIT BADE ALL OUD COLECTION 5*5ML", brand: "LATTAFA", size: "KIT", price: "R$ 175,00", image: "", stock: 5, sku: "" },
+      { id: 59, name: "AMETHYST", brand: "LATTAFA", size: "100ML", price: "R$ 135,00", image: "", stock: 5, sku: "" },
+      { id: 60, name: "AL NOBLE AMEER", brand: "LATTAFA", size: "100ML", price: "R$ 150,00", image: "", stock: 5, sku: "" },
+      { id: 61, name: "AL NOBLE WAZEER", brand: "LATTAFA", size: "100ML", price: "R$ 165,00", image: "", stock: 5, sku: "" },
+      { id: 62, name: "AL NOBLE SAFEER", brand: "LATTAFA", size: "100ML", price: "R$ 150,00", image: "", stock: 5, sku: "" },
+      { id: 63, name: "HIS CONFESSION", brand: "LATTAFA", size: "100ML", price: "R$ 190,00", image: "", stock: 5, sku: "" },
+      { id: 64, name: "HER CONFESSION", brand: "LATTAFA", size: "100ML", price: "R$ 190,00", image: "", stock: 5, sku: "" },
+      { id: 65, name: "OPULENT DUBAI", brand: "LATTAFA", size: "100ML", price: "R$ 135,00", image: "", stock: 5, sku: "" },
+      { id: 66, name: "NEBRAS ELIXIR", brand: "LATTAFA", size: "100ML", price: "R$ 260,00", image: "", stock: 5, sku: "" },
+      { id: 67, name: "NEBRAS", brand: "LATTAFA", size: "100ML", price: "R$ 170,00", image: "", stock: 5, sku: "" },
+      { id: 68, name: "PRIDE VINTAGE RADIO", brand: "LATTAFA", size: "100ML", price: "R$ 170,00", image: "", stock: 5, sku: "" },
+      { id: 69, name: "PISA", brand: "LATTAFA", size: "100ML", price: "R$ 260,00", image: "", stock: 5, sku: "" },
+      { id: 70, name: "QAED AL FRUSAN", brand: "LATTAFA", size: "90ML", price: "R$ 110,00", image: "", stock: 5, sku: "" },
+      { id: 71, name: "QAED AL FRUSAN UNLIMITED", brand: "LATTAFA", size: "90ML", price: "R$ 95,00", image: "", stock: 5, sku: "" },
+      { id: 72, name: "QAED AL FRUSAN UNTAMED", brand: "LATTAFA", size: "100ML", price: "R$ 110,00", image: "", stock: 5, sku: "" },
+      { id: 73, name: "VICTORIA", brand: "LATTAFA", size: "100ML", price: "R$ 150,00", image: "", stock: 5, sku: "" },
+      { id: 74, name: "MAYAR CHERRY INTENSE", brand: "LATTAFA", size: "100ML", price: "R$ 145,00", image: "", stock: 5, sku: "" },
+      { id: 75, name: "AJWAD PINK", brand: "LATTAFA", size: "60ML", price: "R$ 110,00", image: "", stock: 5, sku: "" },
+      { id: 76, name: "AJWAD", brand: "LATTAFA", size: "60ML", price: "R$ 110,00", image: "", stock: 5, sku: "" },
+      { id: 77, name: "AMEER AL ARAB BLACK", brand: "LATTAFA", size: "100ML", price: "R$ 100,00", image: "", stock: 5, sku: "" },
+      { id: 78, name: "AMEER AL ARAB PRIVE ROSE", brand: "LATTAFA", size: "100ML", price: "R$ 100,00", image: "", stock: 5, sku: "" },
+      { id: 79, name: "AMEERAT AL ARAB", brand: "LATTAFA", size: "100ML", price: "R$ 100,00", image: "", stock: 5, sku: "" },
+
+      { id: 80, name: "CLUB DE NUIT URBAN ELIXIR", brand: "ARMAF", size: "105ML", price: "R$ 225,00", image: "", stock: 5, sku: "" },
+      { id: 81, name: "CLUB DE NUIT INTENSE PERFAUM", brand: "ARMAF", size: "105ML", price: "R$ 420,00", image: "", stock: 5, sku: "" },
+      { id: 82, name: "CLUB DE NUIT INTENSE", brand: "ARMAF", size: "105ML", price: "R$ 210,00", image: "", stock: 5, sku: "" },
+      { id: 83, name: "CLUB DE NUIT WOMEN", brand: "ARMAF", size: "105ML", price: "R$ 180,00", image: "", stock: 5, sku: "" },
+      { id: 84, name: "CLUB DE NUIT ICONE", brand: "ARMAF", size: "105ML", price: "R$ 270,00", image: "", stock: 5, sku: "" },
+      { id: 85, name: "CLUB DE NUIT BLIND", brand: "ARMAF", size: "75ML", price: "R$ 380,00", image: "", stock: 5, sku: "" },
+      { id: 86, name: "CLUB DE NUIR SILAG", brand: "ARMAF", size: "105ML", price: "R$ 240,00", image: "", stock: 5, sku: "" },
+      { id: 87, name: "CLUB DE NUIT PRECIOUS 1", brand: "ARMAF", size: "", price: "R$ 330,00", image: "", stock: 5, sku: "" },
+      { id: 88, name: "CLUB DE NUIT LIONHEART", brand: "ARMAF", size: "", price: "R$ 230,00", image: "", stock: 5, sku: "" },
+      { id: 89, name: "CLUB DE NUIT MALEKA", brand: "ARMAF", size: "", price: "", image: "", stock: 5, sku: "" },
+      { id: 90, name: "CLUB DE NUIT UNDOLD", brand: "ARMAF", size: "", price: "R$ 280,00", image: "", stock: 5, sku: "" },
+      { id: 91, name: "YUMYUMY", brand: "ARMAF", size: "100ML", price: "R$ 280,00", image: "", stock: 5, sku: "" },
+      { id: 92, name: "ISLAND BLESS", brand: "ARMAF", size: "", price: "R$ 280,00", image: "", stock: 5, sku: "" },
+
+      { id: 93, name: "ALPINE HOMME SPORT", brand: "MAISON ALHAMBRA", size: "100ML", price: "R$ 135,00", image: "", stock: 5, sku: "" },
+      { id: 94, name: "COMO MOISELLE", brand: "MAISON ALHAMBRA", size: "100ML", price: "R$ 140,00", image: "", stock: 5, sku: "" },
+      { id: 95, name: "PERSEUS", brand: "MAISON ALHAMBRA", size: "100ML", price: "R$ 125,00", image: "", stock: 5, sku: "" },
+      { id: 96, name: "PERSEUS EXCLUSIF", brand: "MAISON ALHAMBRA", size: "100ML", price: "R$ 135,00", image: "", stock: 5, sku: "" },
+      { id: 97, name: "DELILAH", brand: "MAISON ALHAMBRA", size: "100ML", price: "R$ 140,00", image: "", stock: 5, sku: "" },
+      { id: 98, name: "JARDIN DE PARIS", brand: "MAISON ALHAMBRA", size: "100ML", price: "R$ 135,00", image: "", stock: 5, sku: "" },
+      { id: 99, name: "YEAH!", brand: "MAISON ALHAMBRA", size: "100ML", price: "R$ 125,00", image: "", stock: 5, sku: "" },
+      { id: 100, name: "LA VOIE", brand: "MAISON ALHAMBRA", size: "100ML", price: "R$ 125,00", image: "", stock: 5, sku: "" },
+      { id: 101, name: "GLACIER BELLA", brand: "MAISON ALHAMBRA", size: "100ML", price: "R$ 110,00", image: "", stock: 5, sku: "" },
+      { id: 102, name: "LA VIVACITE", brand: "MAISON ALHAMBRA", size: "100ML", price: "R$ 115,00", image: "", stock: 5, sku: "" },
+      { id: 103, name: "LA VIVACITE INTENSA", brand: "MAISON ALHAMBRA", size: "100ML", price: "R$ 120,00", image: "", stock: 5, sku: "" },
+      { id: 104, name: "L'INTRUDE", brand: "MAISON ALHAMBRA", size: "100ML", price: "R$ 130,00", image: "", stock: 5, sku: "" },
+      { id: 105, name: "LEONIE", brand: "MAISON ALHAMBRA", size: "100ML", price: "R$ 130,00", image: "", stock: 5, sku: "" },
+      { id: 106, name: "LEONIE INTENSE", brand: "MAISON ALHAMBRA", size: "100ML", price: "R$ 125,00", image: "", stock: 5, sku: "" },
+      { id: 107, name: "NO.2 MEN", brand: "MAISON ALHAMBRA", size: "80ML", price: "R$ 125,00", image: "", stock: 5, sku: "" },
+      { id: 108, name: "MAITRE DE BLUE", brand: "MAISON ALHAMBRA", size: "100ML", price: "R$ 120,00", image: "", stock: 5, sku: "" },
+      { id: 109, name: "SALVI EDP", brand: "MAISON ALHAMBRA", size: "100ML", price: "R$ 125,00", image: "", stock: 5, sku: "" },
+      { id: 110, name: "SO CANDY", brand: "MAISON ALHAMBRA", size: "80ML", price: "R$ 140,00", image: "", stock: 5, sku: "" },
+      { id: 111, name: "SO CANDY MEN", brand: "MAISON ALHAMBRA", size: "", price: "R$ 150,00", image: "", stock: 5, sku: "" },
+      { id: 112, name: "SALVO INTENSE", brand: "MAISON ALHAMBRA", size: "100ML", price: "R$ 115,00", image: "", stock: 5, sku: "" },
+      { id: 113, name: "LA ROUGE BAROQUE EXTREME", brand: "MAISON ALHAMBRA", size: "100ML", price: "R$ 125,00", image: "", stock: 5, sku: "" },
+      { id: 114, name: "LA ROUGE BAROQUE", brand: "MAISON ALHAMBRA", size: "100ML", price: "R$ 120,00", image: "", stock: 5, sku: "" },
+      { id: 115, name: "CHANTIS", brand: "MAISON ALHAMBRA", size: "", price: "R$ 120,00", image: "", stock: 5, sku: "" },
+      { id: 116, name: "GLACIER OR ROME", brand: "MAISON ALHAMBRA", size: "", price: "R$ 120,00", image: "", stock: 5, sku: "" },
+      { id: 117, name: "GLACIER ULTRA MASCULINO", brand: "MAISON ALHAMBRA", size: "", price: "R$ 120,00", image: "", stock: 5, sku: "" },
+      { id: 118, name: "PINK ECLIPSE", brand: "MAISON ALHAMBRA", size: "", price: "R$ 140,00", image: "", stock: 5, sku: "" },
+
+      { id: 119, name: "ORIENTICA AZURE", brand: "ORIENTICA", size: "80ML", price: "R$ 430,00", image: "", stock: 5, sku: "" },
+      { id: 120, name: "ROYAL AMBER", brand: "ORIENTICA", size: "100ML", price: "R$ 420,00", image: "", stock: 5, sku: "" },
+      { id: 121, name: "KIT ROYAL AMBER", brand: "ORIENTICA", size: "", price: "R$ 480,00", image: "", stock: 5, sku: "" },
+
+      { id: 122, name: "9TM ELIXIR", brand: "AFNAN", size: "", price: "R$ 260,00", image: "", stock: 5, sku: "" },
+
+      { id: 123, name: "HAWAS BLACK TROPICAL", brand: "RASASI", size: "", price: "R$ 290,00", image: "", stock: 5, sku: "" },
+      { id: 124, name: "HAWAS VERDE", brand: "RASASI", size: "", price: "R$ 290,00", image: "", stock: 5, sku: "" },
+      { id: 125, name: "HAWAS BLACK", brand: "RASASI", size: "", price: "R$ 180,00", image: "", stock: 5, sku: "" },
+
+      { id: 126, name: "ZIMAIA ROXO", brand: "ZIMAIA", size: "", price: "R$ 100,00", image: "", stock: 5, sku: "" },
+    ];
+
+    let settings = loadSettings();
+    let perfumes = loadPerfumes();
+    let isAdmin = true;
+
+    // UI refs
+    const catalogEl = document.getElementById("catalog");
+    const modePill = document.getElementById("modePill");
+    const toggleModeBtn = document.getElementById("toggleModeBtn");
+    const newPerfumeBtn = document.getElementById("newPerfumeBtn");
+    const exportBtn = document.getElementById("exportBtn");
+    const importInput = document.getElementById("importInput");
+    const resetBtn = document.getElementById("resetBtn");
+
+    const modalOverlay = document.getElementById("modalOverlay");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalSub = document.getElementById("modalSub");
+    const perfumeForm = document.getElementById("perfumeForm");
+    const deleteBtn = document.getElementById("deleteBtn");
+
+    const fName = document.getElementById("fName");
+    const fBrand = document.getElementById("fBrand");
+    const fSize = document.getElementById("fSize");
+    const fPrice = document.getElementById("fPrice");
+    const fImage = document.getElementById("fImage");
+    const fStock = document.getElementById("fStock");
+    const fSku = document.getElementById("fSku");
+
+    const stockName = document.getElementById("stockName");
+    const stockNow = document.getElementById("stockNow");
+    const stockStatus = document.getElementById("stockStatus");
+    const dec1Btn = document.getElementById("dec1Btn");
+    const inc1Btn = document.getElementById("inc1Btn");
+    const dec5Btn = document.getElementById("dec5Btn");
+    const inc5Btn = document.getElementById("inc5Btn");
+
+    const toastEl = document.getElementById("toast");
+
+    const syncUrl = document.getElementById("syncUrl");
+    const loadFromUrlBtn = document.getElementById("loadFromUrlBtn");
+
+    let editingId = null;
+
+    function loadSettings() {
+      try {
+        const raw = localStorage.getItem(SETTINGS_KEY);
+        if (!raw) return structuredClone(defaultSettings);
+        return { ...defaultSettings, ...JSON.parse(raw) };
+      } catch (e) {
+        return structuredClone(defaultSettings);
+      }
+    }
+    function saveSettings() {
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    }
+
+    function normalizeItem(p) {
+      return {
+        id: Number(p.id),
+        name: String(p.name ?? ""),
+        brand: String(p.brand ?? ""),
+        size: String(p.size ?? ""),
+        price: String(p.price ?? ""),
+        image: String(p.image ?? ""),
+        stock: Number.isFinite(Number(p.stock)) ? Math.max(0, Math.floor(Number(p.stock))) : 0,
+        sku: String(p.sku ?? ""),
+      };
+    }
+
+    function loadPerfumes() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return defaultPerfumes.map(normalizeItem);
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return defaultPerfumes.map(normalizeItem);
+        return parsed.map(normalizeItem);
+      } catch (e) {
+        return defaultPerfumes.map(normalizeItem);
+      }
+    }
+
+    function savePerfumes() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(perfumes));
+    }
+
+    function formatStockBadge(stock) {
+      if (stock <= 0) return { text: "Sem estoque", cls: "out" };
+      if (stock <= 3) return { text: `Baixo: ${stock}`, cls: "low" };
+      return { text: `Estoque: ${stock}`, cls: "" };
+    }
+
+    function svgArt(seed) {
+      const a = (seed * 47) % 360;
+      const b = (seed * 91) % 360;
+      const c = (seed * 173) % 360;
+      return `
+        <svg viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Arte abstrata do perfume">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="hsla(${a},85%,65%,.55)"/>
+              <stop offset="1" stop-color="hsla(${b},85%,55%,.25)"/>
+            </linearGradient>
+            <radialGradient id="g2" cx=".3" cy=".35" r=".85">
+              <stop offset="0" stop-color="hsla(${c},90%,70%,.35)"/>
+              <stop offset="1" stop-color="transparent"/>
+            </radialGradient>
+          </defs>
+          <rect x="-10" y="-10" width="240" height="180" fill="url(#g1)"/>
+          <circle cx="70" cy="60" r="60" fill="url(#g2)"/>
+          <path d="M145 18c18 20 30 44 30 68 0 28-16 52-40 64-25 12-56 13-86 5 36 1 65-9 83-27 18-18 22-46 13-70z"
+                fill="rgba(0,0,0,.18)"/>
+          <g opacity=".85">
+            <rect x="96" y="28" width="56" height="96" rx="16" fill="rgba(255,255,255,.10)" stroke="rgba(214,179,106,.25)"/>
+            <rect x="108" y="40" width="32" height="52" rx="10" fill="rgba(0,0,0,.18)"/>
+            <rect x="116" y="18" width="16" height="18" rx="6" fill="rgba(214,179,106,.30)"/>
+          </g>
+        </svg>
+      `;
+    }
+
+    function cardTemplate(p) {
+      const badge = formatStockBadge(p.stock);
+      const img = p.image?.trim()
+        ? `<div class="art" style="background-image: radial-gradient(240px 240px at 20% 20%, rgba(214,179,106,.18), transparent 60%), linear-gradient(180deg, rgba(20,18,17,.78), rgba(10,9,8,.55));">
+             <img alt="Imagem do perfume ${escapeHtml(p.name)}" src="${escapeAttr(p.image)}"
+                  style="width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.05) contrast(1.05);" />
+             <div class="imgLabel">imagem</div>
+           </div>`
+        : `<div class="art">${svgArt(p.id)}<div class="imgLabel">arte</div></div>`;
+
+      const adminBtns = isAdmin
+        ? `<div class="cardActions">
+          <button class="btn primary" type="button" data-action="edit" data-id="${p.id}">Ajustar</button>
+        </div>`
+        : `<div class="cardActions">
+          <button class="btn" type="button" data-action="details" data-id="${p.id}">Ver</button>
+        </div>`;
+
+      return `
+        <article class="card" data-card-id="${p.id}">
+          <div class="cardTop">
+            <span class="badge ${badge.cls}">${badge.text}</span>
+            <span class="badge" title="Tamanho">${escapeHtml(p.size)}</span>
+          </div>
+
+          ${img}
+
+          <div class="cardBody">
+            <h3 class="name">${escapeHtml(p.name)}</h3>
+            <p class="brandLine">${escapeHtml(p.brand)}${p.sku ? ` • <span class="small">${escapeHtml(p.sku)}</span>` : ""}</p>
+            <div class="facts">
+              <div class="fact"><span>Preço</span><div class="price">${escapeHtml(p.price)}</div></div>
+              <div class="fact"><span>Estoque</span><div>${p.stock <= 0 ? `<span style="color:rgba(255,190,198,.95);font-weight:800;">0</span>` : `<span style="color:rgba(242,239,230,.92);font-weight:800;">${p.stock}</span>`}</div></div>
+            </div>
+          </div>
+
+          ${adminBtns}
+        </article>
+      `;
+    }
+
+    function getVisiblePerfumes() {
+      if (isAdmin) return perfumes;
+      if (settings.hideOutOfStockOnClient) {
+        return perfumes.filter((p) => p.stock > 0);
+      }
+      return perfumes;
+    }
+
+    function render() {
+      modePill.textContent = isAdmin ? "ADMIN" : "CLIENTE";
+      modePill.style.background = isAdmin
+        ? "linear-gradient(135deg, var(--gold), #f1d59a)"
+        : "linear-gradient(135deg, rgba(101,255,184,.95), rgba(101,255,184,.55))";
+
+      newPerfumeBtn.style.display = isAdmin ? "inline-flex" : "none";
+      exportBtn.style.display = isAdmin ? "inline-flex" : "none";
+      resetBtn.style.display = isAdmin ? "inline-flex" : "none";
+      document.querySelector('label[for="importInput"]').style.display = isAdmin ? "inline-flex" : "none";
+
+      const list = getVisiblePerfumes();
+      catalogEl.innerHTML = list.map(cardTemplate).join("");
+    }
+
+    function openModal(mode, perfume) {
+      editingId = perfume?.id ?? null;
+
+      modalTitle.textContent = mode === "new" ? "Adicionar perfume" : "Editar perfume";
+      modalSub.textContent = mode === "new"
+        ? "Crie um novo item e defina estoque."
+        : "Ajuste informações e estoque.";
+
+      fName.value = perfume?.name ?? "";
+      fBrand.value = perfume?.brand ?? "";
+      fSize.value = perfume?.size ?? "";
+      fPrice.value = perfume?.price ?? "";
+      fImage.value = perfume?.image ?? "";
+      fStock.value = String(perfume?.stock ?? 0);
+      fSku.value = perfume?.sku ?? "";
+
+      deleteBtn.style.display = mode === "edit" ? "inline-flex" : "none";
+
+      updateStockSide(perfume);
+
+      modalOverlay.classList.add("show");
+      document.body.style.overflow = "hidden";
+      setTimeout(() => fName.focus(), 0);
+    }
+
+    function closeModal() {
+      modalOverlay.classList.remove("show");
+      document.body.style.overflow = "";
+      editingId = null;
+      unlockFormForAdmin();
+    }
+
+    function updateStockSide(perfume) {
+      if (!perfume) {
+        stockName.textContent = "—";
+        stockNow.textContent = "—";
+        stockStatus.textContent = "—";
+        return;
+      }
+      stockName.textContent = perfume.name;
+      stockNow.textContent = String(perfume.stock ?? 0);
+
+      if ((perfume.stock ?? 0) <= 0)
+        stockStatus.innerHTML = `Status: <span style="color:rgba(255,190,198,.98);font-weight:800;">sem estoque</span>`;
+      else if ((perfume.stock ?? 0) <= 3)
+        stockStatus.innerHTML = `Status: <span style="color:rgba(255,232,190,.98);font-weight:800;">baixo</span>`;
+      else
+        stockStatus.innerHTML = `Status: <span style="color:rgba(210,255,236,.98);font-weight:800;">ok</span>`;
+    }
+
+    function nextId() {
+      return Math.max(0, ...perfumes.map((p) => Number(p.id) || 0)) + 1;
+    }
+
+    function toast(msg) {
+      toastEl.innerHTML = msg;
+      toastEl.classList.add("show");
+      clearTimeout(toastEl._t);
+      toastEl._t = setTimeout(() => toastEl.classList.remove("show"), 2200);
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, (s) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;",
+      }[s]));
+    }
+    function escapeAttr(str) {
+      return String(str).replace(/"/g, "%22");
+    }
+
+    // Event listeners and logic for buttons, modal, form submission, stock adjustment, import/export, reset, and sync URL loading
+    toggleModeBtn.addEventListener("click", () => {
+      isAdmin = !isAdmin;
+      toggleModeBtn.setAttribute("aria-pressed", String(isAdmin));
+      toast(isAdmin ? "Modo <span class='k'>Admin</span> ativado" : "Modo <span class='k'>Cliente</span> ativado");
+      render();
+      closeModal();
+    });
+
+    newPerfumeBtn.addEventListener("click", () => {
+      if (!isAdmin) return;
+      openModal("new", { id: nextId(), name: "", brand: "", size: "100ML", price: "R$ 0,00", image: "", stock: 0, sku: "" });
+    });
+
+    closeModalBtn.addEventListener("click", closeModal);
+    modalOverlay.addEventListener("click", (e) => {
+      if (e.target === modalOverlay) closeModal();
+    });
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modalOverlay.classList.contains("show")) closeModal();
+    });
+
+    catalogEl.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-action]");
+      if (!btn) return;
+      const action = btn.dataset.action;
+      const id = Number(btn.dataset.id);
+      const perfume = perfumes.find((p) => p.id === id);
+      if (!perfume) return;
+
+      if (action === "edit") {
+        if (!isAdmin) return;
+        openModal("edit", perfume);
+      }
+      if (action === "details") {
+        openModal("edit", perfume);
+        [fName, fBrand, fSize, fPrice, fImage, fStock, fSku].forEach((el) => el.setAttribute("disabled", "disabled"));
+        deleteBtn.style.display = "none";
+        document.getElementById("saveBtn").style.display = "none";
+        modalTitle.textContent = "Detalhes do perfume";
+        modalSub.textContent = "Visualização do catálogo (cliente).";
+      }
+    });
+
+    function unlockFormForAdmin() {
+      [fName, fBrand, fSize, fPrice, fImage, fStock, fSku].forEach((el) => el.removeAttribute("disabled"));
+      document.getElementById("saveBtn").style.display = "inline-flex";
+    }
+
+    perfumeForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (!isAdmin) return;
+
+      const id = editingId ?? nextId();
+
+      const updated = normalizeItem({
+        id,
+        name: fName.value.trim(),
+        brand: fBrand.value.trim(),
+        size: fSize.value.trim(),
+        price: fPrice.value.trim(),
+        image: fImage.value.trim(),
+        stock: Number(fStock.value),
+        sku: fSku.value.trim(),
+      });
+
+      const idx = perfumes.findIndex((p) => p.id === id);
+      if (idx >= 0) {
+        perfumes[idx] = updated;
+        toast("Perfume <span class='k'>atualizado</span>");
+      } else {
+        perfumes.unshift(updated);
+        toast("Perfume <span class='k'>adicionado</span>");
+      }
+
+      savePerfumes();
+      render();
+      openModal("edit", updated);
+    });
+
+    deleteBtn.addEventListener("click", () => {
+      if (!isAdmin) return;
+      if (editingId == null) return;
+
+      const perfume = perfumes.find((p) => p.id === editingId);
+      const name = perfume?.name ?? "este item";
+      const ok = confirm(`Excluir "${name}"?`);
+      if (!ok) return;
+
+      perfumes = perfumes.filter((p) => p.id !== editingId);
+      savePerfumes();
+      render();
+      toast("Item <span class='k'>excluído</span>");
+      closeModal();
+    });
+
+    function adjustStock(delta) {
+      if (!isAdmin) return;
+      if (editingId == null) return;
+
+      const idx = perfumes.findIndex((p) => p.id === editingId);
+      if (idx < 0) return;
+
+      perfumes[idx].stock = Math.max(0, Math.floor((perfumes[idx].stock ?? 0) + delta));
+      fStock.value = String(perfumes[idx].stock);
+      updateStockSide(perfumes[idx]);
+      savePerfumes();
+      render();
+      toast(`Estoque: <span class='k'>${perfumes[idx].stock}</span>`);
+    }
+
+    inc1Btn.addEventListener("click", () => adjustStock(+1));
+    dec1Btn.addEventListener("click", () => adjustStock(-1));
+    inc5Btn.addEventListener("click", () => adjustStock(+5));
+    dec5Btn.addEventListener("click", () => adjustStock(-5));
+
+    fStock.addEventListener("input", () => {
+      const n = Math.max(0, Math.floor(Number(fStock.value || 0)));
+      stockNow.textContent = String(n);
+      const temp = { name: fName.value || "—", stock: n };
+      updateStockSide(temp);
+    });
+
+    exportBtn.addEventListener("click", () => {
+      if (!isAdmin) return;
+      const data = {
+        version: 2,
+        exportedAt: new Date().toISOString(),
+        perfumes: perfumes.map(normalizeItem),
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "perfumes.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      toast("JSON <span class='k'>exportado</span>");
+    });
+
+    importInput.addEventListener("change", async (e) => {
+      if (!isAdmin) return;
+      const file = e.target.files?.[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const parsed = JSON.parse(text);
+
+        let incoming = null;
+        if (Array.isArray(parsed)) incoming = parsed;
+        else if (parsed && Array.isArray(parsed.perfumes)) incoming = parsed.perfumes;
+
+        if (!incoming) throw new Error("Formato inválido");
+
+        perfumes = incoming.map(normalizeItem);
+        savePerfumes();
+        render();
+        toast("JSON <span class='k'>importado</span>");
+      } catch (err) {
+        alert("Não foi possível importar. Verifique o JSON.");
+      } finally {
+        importInput.value = "";
+      }
+    });
+
+    resetBtn.addEventListener("click", () => {
+      if (!isAdmin) return;
+      const ok = confirm("Resetar dados locais? Isso volta ao catálogo padrão e apaga alterações salvas no navegador.");
+      if (!ok) return;
+      localStorage.removeItem(STORAGE_KEY);
+      perfumes = defaultPerfumes.map(normalizeItem);
+      savePerfumes();
+      render();
+      toast("Reset <span class='k'>feito</span>");
+    });
+
+    loadFromUrlBtn.addEventListener("click", async () => {
+      const url = syncUrl.value.trim();
+      if (!url) {
+        alert("Cole a URL do JSON.");
+        return;
+      }
+      try {
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const parsed = await res.json();
+
+        let incoming = null;
+        if (Array.isArray(parsed)) incoming = parsed;
+        else if (parsed && Array.isArray(parsed.perfumes)) incoming = parsed.perfumes;
+
+        if (!incoming) throw new Error("Formato inválido");
+
+        perfumes = incoming.map(normalizeItem);
+        savePerfumes();
+        render();
+        toast("Catálogo <span class='k'>carregado</span> da URL");
+      } catch (err) {
+        alert("Falha ao carregar URL. Pode ser CORS ou URL inválida.");
+      }
+    });
+
+    function unlockFormForAdmin() {
+      [fName, fBrand, fSize, fPrice, fImage, fStock, fSku].forEach((el) => el.removeAttribute("disabled"));
+      document.getElementById("saveBtn").style.display = "inline-flex";
+    }
+
+    modalOverlay.addEventListener("transitionend", () => {});
+    modalOverlay.addEventListener("click", () => {
+      if (isAdmin) unlockFormForAdmin();
+    });
+    closeModalBtn.addEventListener("click", () => {
+      if (isAdmin) unlockFormForAdmin();
+    });
+
+    const _openModal = openModal;
+    openModal = function (mode, perfume) {
+      if (isAdmin) unlockFormForAdmin();
+      _openModal(mode, perfume);
+    };
+
+    saveSettings();
+    savePerfumes();
+    render();
+  </script>
+</body>
+</html>
+
+          # Upload entire repository
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
